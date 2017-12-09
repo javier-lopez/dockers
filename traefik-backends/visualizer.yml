@@ -19,7 +19,7 @@ services:
         delay: 2s
       labels:
         - "traefik.backend=visualizer"
-        - "traefik.frontend.rule=Host:monitor.example.com"
+        - "traefik.frontend.rule=Host:visualizer.example.com"
         - "traefik.docker.network=traefik_external"
         - "traefik.port=8080"
     networks:
