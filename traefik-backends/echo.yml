@@ -1,0 +1,28 @@
+version: "3.0"
+
+services:
+  echo:
+    image: katacoda/docker-http-server:v2
+    ports:
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      placement:
+        constraints: [node.role == worker]
+      update_config:
+        delay: 2s
+      labels:
+        - "traefik.backend=echo"
+        - "traefik.frontend.rule=Host:echo.example.com"
+        - "traefik.docker.network=traefik_external"
+        - "traefik.port=80"
+    networks:
+      - traefik_external
+
+networks:
+  traefik_external:
+    external: true

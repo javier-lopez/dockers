@@ -1,0 +1,30 @@
+version: "3.0"
+
+services:
+  visualizer:
+    image: "dockersamples/visualizer:latest"
+    ports:
+      - "5001:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
+      labels:
+        - "traefik.backend=visualizer"
+        - "traefik.frontend.rule=Host:monitor.example.com"
+        - "traefik.docker.network=traefik_external"
+        - "traefik.port=8080"
+    networks:
+      - traefik_external
+
+networks:
+  traefik_external:
+    external: true

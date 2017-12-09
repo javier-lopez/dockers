@@ -1,0 +1,33 @@
+version: "3.0"
+
+services:
+  nexus:
+    image: "sonatype/nexus3:3.6.2"
+    ports:
+      - "8081:8081"
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      placement:
+        constraints: [node.role == worker]
+      update_config:
+        delay: 2s
+      labels:
+        - "traefik.backend=nexus"
+        - "traefik.frontend.rule=Host:nexus.example.com"
+        - "traefik.docker.network=traefik_external"
+        - "traefik.port=8081"
+    networks:
+      - traefik_external
+    environment:
+      - NODE_ENV=local
+      - SERVICE_8081_NAME=nexus
+      - SERVICE_8081_CHECK_HTTP=/
+      - NEXUS_CONTEXT=/
+      - INSTALL4J_ADD_VM_PARAMS=-Xms1200M -Xmx1200M -XX:MaxDirectMemorySize=1200M
+
+networks:
+  traefik_external:
+    external: true

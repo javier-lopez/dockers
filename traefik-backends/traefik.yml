@@ -1,0 +1,30 @@
+version: "3.0"
+
+services:
+  traefik:
+    image: "traefik:v1.5-alpine"
+    command:
+      - --docker
+      - --docker.swarmmode
+      - --docker.watch
+      - --web
+      - --loglevel=DEBUG
+    ports:
+      - "80:80"
+      - "8888:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      restart_policy:
+        condition: any
+      update_config:
+        delay: 2s
+      placement:
+         constraints: [node.role == manager]
+    networks:
+      - external
+
+networks:
+  external:
+    driver: overlay
