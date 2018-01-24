@@ -7,4 +7,9 @@ Usage
 -----
 
     $ cd recipe/
+
+    #on a docker swarm
     $ docker stack deploy -c service.yml service
+
+    #on a single docker node with docker-compose
+    $ docker-compose -f service.yml up
