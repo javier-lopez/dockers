@@ -1,0 +1,40 @@
+version: "3.4"
+
+services:
+  postgresql:
+    image: "library/postgres:9.5.9-alpine"
+    #volumes:
+      #- "./data/postgresql:/var/lib/postgresql/data/pgdata:Z"
+      #- "./data/postgresql/xlog:/var/lib/postgresql/data/xlog:Z"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sonar
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_INITDB_XLOGDIR=/var/lib/postgresql/data/xlog
+
+  sonar:
+    image: "library/sonarqube:6.6-alpine"
+    ports:
+      - "9000:9000"
+      - "9092:9092"
+    depends_on:
+      - postgresql
+    volumes:
+      - "./data/sonar/etc:/opt/sonarqube/conf:Z"
+      - "./data/sonar/data:/opt/sonarqube/data:Z"
+      - "./data/sonar/logs:/opt/sonarqube/logs:Z"
+      - "./data/sonar/extensions:/opt/sonarqube/extensions:Z"
+    environment:
+      - SONARQUBE_JDBC_USERNAME=sonar
+      - SONARQUBE_JDBC_PASSWORD=password
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql/sonar
+      #- SONARQUBE_LDAP_URL=ldap://domain.tld
+      #- SONARQUBE_LDAP_BINDDN=
+      #- SONARQUBE_LDAP_PASS=
+      #- SONARQUBE_LDAP_USER_BASEDN=
+      #- SONARQUBE_LDAP_USER_REQUEST=
+      #- SONARQUBE_LDAP_USER_RN_ATT=
+      #- SONARQUBE_LDAP_USER_EMAIL=
+      #- SONARQUBE_LDAP_GROUP_BASEDN=
+      #- SONARQUBE_LDAP_GROUP_REQUEST=
