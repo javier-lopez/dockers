@@ -4,7 +4,7 @@ EXPOSE 8080
 
 ENV TERM="xterm"
 
-RUN apk add --update curl libc6-compat              && \
+RUN apk add --update curl tmux libc6-compat         && \
     curl -s https://raw.githubusercontent.com/javier-lopez/learn/master/sh/tools/gh-release-downloader \
     > /usr/bin/gh-release-downloader                && \
     chmod +x /usr/bin/gh-release-downloader         && \
@@ -12,9 +12,9 @@ RUN apk add --update curl libc6-compat              && \
     gh-release-downloader -r RELEASE -x yudai/gotty && \
     mv *_amd64/gotty /usr/bin/gotty                 && \
     chmod +x /usr/bin/gotty                         && rm -rf gotty_linux_amd64* && \
-    apk del curl && rm -rf /var/cache/apk/*
+    rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["/usr/bin/gotty"]
-CMD ["--permit-write","--reconnect", "/bin/sh"]
+CMD ["--permit-write","--reconnect", "tmux", "new", "-A", "-s", "gotty", "/bin/sh"]
 
 #  vim: set ts=8 sw=4 tw=0 ft=dockerfile :
