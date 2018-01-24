@@ -29,6 +29,7 @@ services:
       - SONARQUBE_JDBC_USERNAME=sonar
       - SONARQUBE_JDBC_PASSWORD=password
       - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql/sonar
+      #- Default user => admin / admin
       #- SONARQUBE_LDAP_URL=ldap://domain.tld
       #- SONARQUBE_LDAP_BINDDN=
       #- SONARQUBE_LDAP_PASS=
