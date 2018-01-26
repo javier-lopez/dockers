@@ -1,0 +1,80 @@
+version: "3.4"
+
+services:
+  redis:
+    image: "sameersbn/redis:latest"
+    command: --loglevel warning
+    volumes:
+      - "./gitlab/redis/data:/var/lib/redis:Z"
+
+  postgresql:
+    image: "sameersbn/postgresql:9.6-2"
+    volumes:
+      - "./gitlab/postgresql/data:/var/lib/postgresql:Z"
+    environment:
+      - DB_USER=gitlab
+      - DB_PASS=gitlab
+      - DB_NAME=gitlabhq_production
+      - DB_EXTENSION=pg_trgm
+
+  gitlab:
+    image: "sameersbn/gitlab:10.2.2"
+    depends_on:
+      - redis
+      - postgresql
+    ports:
+      - "10022:22"
+      - "10080:80"
+      - "10443:443"
+    volumes:
+      - "./gitlab/data:/home/git/data:Z"
+    environment:
+      #- NODE_ENV={{env}}
+      #- HTTP_PROXY={{http_proxy}}
+      #- HTTPS_PROXY={{http_proxy}}
+      #- NO_PROXY="{{no_proxy}}"
+      - DEBUG=false
+      - DB_ADAPTER=postgresql
+      - DB_HOST=postgresql
+      - DB_PORT=5432
+      - DB_USER=gitlab
+      - DB_PASS=gitlab
+      - DB_NAME=gitlabhq_production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      #- GITLAB_PORT={{gitlab_tcp_port}}
+      #- GITLAB_SSH_PORT={{gitlab_ssh_tcp_port}}
+      - TZ=America/Mexico_City
+      - GITLAB_TIMEZONE=Mexico City
+      - GITLAB_HTTPS=false
+      - SSL_SELF_SIGNED=true
+      - GITLAB_SIGNUP_ENABLED=true
+      #- GITLAB_HOST={{gitlab_subdomains[0]}}.{{domain}}
+      - GITLAB_PAGES_ENABLED=true
+      #- GITLAB_PAGES_DOMAIN={{gitlab_subdomains[0]}}.{{domain}}
+      #- GITLAB_RELATIVE_URL_ROOT=
+      - GITLAB_SECRETS_DB_KEY_BASE=password
+      - GITLAB_SECRETS_SECRET_KEY_BASE=password
+      - GITLAB_SECRETS_OTP_KEY_BASE=password
+      - GITLAB_ROOT_PASSWORD=admin
+      #- GITLAB_ROOT_EMAIL=admin@{{gitlab_subdomains[0]}}.{{domain}}
+      - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
+      - GITLAB_NOTIFY_PUSHER=false
+      #- GITLAB_EMAIL=notifications@{{gitlab_subdomains[0]}}.{{domain}}
+      #- GITLAB_EMAIL_REPLY_TO=noreply@{{gitlab_subdomains[0]}}.{{domain}}
+      #- GITLAB_INCOMING_EMAIL_ADDRESS=noreply@{{gitlab_subdomains[0]}}.{{domain}}
+      - GITLAB_EMAIL_DISPLAY_NAME="My Company Gitlab"
+      #- GITLAB_BACKUP_SCHEDULE=daily
+      #- GITLAB_BACKUP_TIME=01:00
+      #- SMTP_ENABLED=true
+      #- SMTP_DOMAIN={{domain}}
+      #- SMTP_HOST={{host}}
+      #- SMTP_PORT=25
+      #- IMAP_ENABLED=false
+      #- IMAP_STARTTLS=false
+      #- LDAP_ENABLED=false
+      #- LDAP_HOST={{ldap_host}}
+      #- LDAP_UID={{vault_ldap_uid}}
+      #- LDAP_PASS={{vault_ldap_pass}}
+      #- LDAP_BIND_DN={{vault_ldap_bind_dn}}
+      #- LDAP_BASE={{ldap_base}}
