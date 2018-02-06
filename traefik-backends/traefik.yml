@@ -8,10 +8,10 @@ services:
       - --docker.swarmmode
       - --docker.watch
       - --web
-      - --loglevel=DEBUG
+      - --web.address=:8888
     ports:
       - "80:80"
-      - "8888:8080"
+      - "8888:8888"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -22,6 +22,11 @@ services:
         delay: 2s
       placement:
          constraints: [node.role == manager]
+      labels:
+        - "traefik.backend=traefik"
+        - "traefik.frontend.rule=Host:traefik.example.com"
+        - "traefik.docker.network=traefik_external"
+        - "traefik.port=8888"
     networks:
       - external
 
