@@ -8,13 +8,6 @@ mongodb:
     - MONGODB_APPLICATION_USER=db
     - MONGODB_APPLICATION_PASS=dashboard
 
-#mongodb:
-  #image: mongo:latest
-  #environment:
-    #- MONGODB_USERNAME=db
-    #- MONGODB_DATABASE=dashboard
-    #- MONGODB_PASSWORD=dashboard
-
 hygieia-api:
   image: capitalone/hygieia-api:latest
   volumes:
