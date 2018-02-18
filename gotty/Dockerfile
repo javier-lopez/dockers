@@ -11,8 +11,8 @@ RUN apk add --update curl libc6-compat              && \
     #gh-release-downloader -r 1.0.1 -x yudai/gotty  && \
     gh-release-downloader -r RELEASE -x yudai/gotty && \
     mv *_amd64/gotty /usr/bin/gotty                 && \
-    chmod +x /usr/bin/gotty                         && rm -rf gotty_linux_amd64* && \
-    apk del curl && rm -rf /var/cache/apk/*
+    chmod +x /usr/bin/gotty                         && \
+    rm -rf gotty_* && apk del curl && rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["/usr/bin/gotty"]
 CMD ["--permit-write","--reconnect", "/bin/sh"]
