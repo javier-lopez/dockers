@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  gotty:
+    build:
+        context: .
+        dockerfile: Dockerfile-tmux
+    image: jlpz/gotty:RELEASE-ubuntu-tmux
+    ports:
+      - "8080:8080"
+    environment:
+      - TERM=xterm
