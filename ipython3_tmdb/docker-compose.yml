@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ipython3.tmdb:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: jlpz/ipython3.tmdb:latest
