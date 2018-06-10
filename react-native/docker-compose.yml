@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  react-native:
+    image: jlpz/react-native:latest
+    build:
+        context: .
+        dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "cd app && yarn start"
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    environment:
+      - TERM=xterm
