@@ -9,7 +9,8 @@ services:
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    command: bash -c "cd app && yarn start"
+    command: bash -c "cd app && yarn && yarn start"
+    #command: bash -c "cd app && yarn && react-native run-android"
     ports:
       - "19000:19000"
       - "19001:19001"
