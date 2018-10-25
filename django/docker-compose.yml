@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  django:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: jlpz/django:latest
