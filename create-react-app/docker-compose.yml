@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  create-react-app:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: jlpz/create-react-app:latest
