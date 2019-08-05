@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  audiostego:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: jlpz/audiostego:latest
