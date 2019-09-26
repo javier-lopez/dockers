@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  certbot-auto:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: jlpz/certbot-auto:latest
