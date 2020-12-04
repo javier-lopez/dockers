@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik_global"
+      #- "--api.insecure=true"
+      #- "--log.level=DEBUG"
+    ports:
+      - "80:80"      #reverse proxy => input to all containerized services
+      #- "8080:8080" #traefik dashboard/api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+
+networks:
+  #create traefik network at running time using the default network driver
+  traefik:
+    #do NOT prepend folder name to network name, instead call it 'traefik_global'
+    #https://stackoverflow.com/questions/42570539/docker-compose-v3-prepend-folder-name-to-network-name
+    name: traefik_global
+

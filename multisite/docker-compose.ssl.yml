@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik_global"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesresolvers.myresolver.acme.email=your-personal@email.tld"
+      - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--api.insecure=true"
+      #- "--log.level=DEBUG"
+    ports:
+      - "80:80"      #reverse proxy => input to all containerized services
+      - "443:443"    #reverse ssl proxy
+      #- "8080:8080" #traefik dashboard/api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Run this command in the host machine before launching traefik:
+      #   $ touch acme.json && chmod 600 acme.json
+      - ${PWD}/acme.json:/acme.json
+    networks:
+      - traefik
+
+networks:
+  #create traefik network at running time using the default network driver
+  traefik:
+    #do NOT prepend folder name to network name, instead call it 'traefik_global'
+    #https://stackoverflow.com/questions/42570539/docker-compose-v3-prepend-folder-name-to-network-name
+    name: traefik_global
